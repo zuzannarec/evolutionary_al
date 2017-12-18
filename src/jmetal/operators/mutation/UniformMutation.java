@@ -32,6 +32,7 @@ import jmetal.util.wrapper.XReal;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  * This class implements a uniform mutation operator.
@@ -45,9 +46,9 @@ public class UniformMutation extends Mutation{
   /**
    * Stores the value used in a uniform mutation operator
    */
-  private Double perturbation_;
+  private Double perturbation_ = 0.9; // range of mutation
   
-  private Double mutationProbability_ = null;
+  private Double mutationProbability_ = 0.2; // how many of genes will be mutated
 
   /** 
    * Constructor
@@ -80,12 +81,17 @@ public class UniformMutation extends Mutation{
    * @throws JMException 
   */
   public void doMutation(double probability, Solution solution) throws JMException {  
-  	XReal x = new XReal(solution) ; 
-
+  	XReal x = new XReal(solution) ;
+    Random random = new Random();
     for (int var = 0; var < solution.getDecisionVariables().length; var++) {
-      if (PseudoRandom.randDouble() < probability) {
-        double rand = PseudoRandom.randDouble();
+      //if (PseudoRandom.randDouble() < probability) {
+      if (random.nextDouble() < probability) {
+      //if (random.nextGaussian() < probability) {
+        //double rand = PseudoRandom.randDouble();
+        double rand = random.nextDouble() ; //values 0-1 from uniform distribution
+        //double rand = random.nextGaussian(); //values 0-1 from normal distribution
         double tmp = (rand - 0.5)*perturbation_.doubleValue();
+        //System.out.println("tmp" + tmp);
                                 
         tmp += x.getValue(var);
                 

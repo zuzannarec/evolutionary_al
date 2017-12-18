@@ -30,6 +30,8 @@ import jmetal.operators.mutation.MutationFactory;
 import jmetal.operators.selection.SelectionFactory;
 import jmetal.problems.singleObjective.OneMax;
 import jmetal.problems.singleObjective.Sphere;
+import jmetal.problems.singleObjective.Griewank;
+import jmetal.problems.singleObjective.Rastrigin;
 import jmetal.util.JMException;
 
 import java.util.HashMap;
@@ -52,12 +54,15 @@ public class GA_main {
     //int bits ; // Length of bit string in the OneMax problem
     HashMap  parameters ; // Operator parameters
 
+      // used for binary codification crossover
 //    int bits = 512 ;
 //    problem = new OneMax("Binary", bits);
 
-    problem = new Sphere("Real", 100) ;
+    // used for real codification crossover
+//      problem = new Sphere("Real", 100) ;
 //    problem = new Easom("Real") ;
 //    problem = new Griewank("Real", 10) ;
+    problem = new Rastrigin("Real", 100) ;
     
     algorithm = new gGA(problem) ; // Generational GA
     //algorithm = new ssGA(problem); // Steady-state GA
@@ -65,8 +70,8 @@ public class GA_main {
     //algorithm = new acGA(problem) ;   // Asynchronous cGA
     
     /* Algorithm parameters*/
-    algorithm.setInputParameter("populationSize",100);
-    algorithm.setInputParameter("maxEvaluations", 25000);
+    algorithm.setInputParameter("populationSize",500);
+    algorithm.setInputParameter("maxEvaluations", 5000);
 
     // Mutation and Crossover for Real codification 
     parameters = new HashMap() ;
@@ -80,15 +85,15 @@ public class GA_main {
     mutation = MutationFactory.getMutationOperator("PolynomialMutation", parameters);
 
     
-    // Mutation and Crossover for Binary codification
+//    // Mutation and Crossover for Binary codification
 //    parameters = new HashMap() ;
 //    parameters.put("probability", 0.9) ;
-//    crossover = CrossoverFactory.getCrossoverOperator("SBXCrossover", parameters);
+//    crossover = CrossoverFactory.getCrossoverOperator("SinglePointCrossover", parameters);
 //
 //    parameters = new HashMap() ;
 //    parameters.put("probability", 1.0/bits) ;
 //    mutation = MutationFactory.getMutationOperator("BitFlipMutation", parameters);
-//
+
 //    /* Selection Operator */
     parameters = null ;
     selection = SelectionFactory.getSelectionOperator("BinaryTournament", parameters) ;
@@ -97,17 +102,16 @@ public class GA_main {
     algorithm.addOperator("crossover",crossover);
     algorithm.addOperator("mutation",mutation);
     algorithm.addOperator("selection",selection);
- 
     /* Execute the Algorithm */
     long initTime = System.currentTimeMillis();
     SolutionSet population = algorithm.execute();
     long estimatedTime = System.currentTimeMillis() - initTime;
-    System.out.println("Total execution time: " + estimatedTime);
+    //System.out.println("Total execution time: " + estimatedTime);
 
     /* Log messages */
-    System.out.println("Objectives values have been writen to file FUN");
+    //System.out.println("Objectives values have been writen to file FUN");
     population.printObjectivesToFile("FUN");
-    System.out.println("Variables values have been writen to file VAR");
+    //System.out.println("Variables values have been writen to file VAR");
     population.printVariablesToFile("VAR");          
   } //main
 } // GA_main

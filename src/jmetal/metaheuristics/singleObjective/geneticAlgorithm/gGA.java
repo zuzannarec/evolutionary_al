@@ -133,8 +133,9 @@ public class gGA extends Algorithm {
     } // while
     
     // Return a population with the best individual
-    SolutionSet resultPopulation = new SolutionSet(1) ;
-    resultPopulation.add(population.get(0)) ;
+    SolutionSet resultPopulation = new SolutionSet(populationSize) ;
+    for(int j = 0; j < populationSize; j++)
+      resultPopulation.add(population.get(j)) ;
     
     System.out.println("Evaluations: " + evaluations ) ;
     return resultPopulation ;

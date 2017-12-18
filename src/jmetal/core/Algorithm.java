@@ -73,8 +73,8 @@ public abstract class Algorithm implements Serializable {
   * @return a <code>SolutionSet</code> that is a set of non dominated solutions
   * as a result of the algorithm execution  
   */
-  public abstract SolutionSet execute() throws JMException, ClassNotFoundException ;   
-  
+  public abstract SolutionSet execute() throws JMException, ClassNotFoundException ;
+
  /**
   * Offers facilities for add new operators for the algorithm. To use an
   * operator, an algorithm has to obtain it through the 

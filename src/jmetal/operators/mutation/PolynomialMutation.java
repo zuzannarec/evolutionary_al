@@ -69,7 +69,7 @@ public class PolynomialMutation extends Mutation {
 	public void doMutation(double probability, Solution solution) throws JMException {        
 		double rnd, delta1, delta2, mut_pow, deltaq;
 		double y, yl, yu, val, xy;
-		XReal x = new XReal(solution) ;		
+		XReal x = new XReal(solution) ;
 		for (int var=0; var < solution.numberOfVariables(); var++) {
 			if (PseudoRandom.randDouble() <= probability)
 			{
@@ -97,7 +97,7 @@ public class PolynomialMutation extends Mutation {
 					y = yl;
 				if (y>yu)
 					y = yu;
-				x.setValue(var, y);                           
+				x.setValue(var, y);
 			}
 		} // for
 
@@ -119,9 +119,9 @@ public class PolynomialMutation extends Mutation {
 			Class cls = java.lang.String.class;
 			String name = cls.getName(); 
 			throw new JMException("Exception in " + name + ".execute()") ;
-		} // if 
-
+		} // if
 		doMutation(mutationProbability_, solution);
+
 		return solution;      
 	} // execute
 

@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 /**
  * Class implementing a single-objective PSO algorithm
  */
-public class PSO extends Algorithm {
+public class PSO extends Algorithm2 {
 
 	/**
    * Stores the number of particles_ used
@@ -80,7 +80,7 @@ public class PSO extends Algorithm {
   Comparator  comparator_  ;
   
   Operator findBestSolution_ ;
-  
+
   double r1Max_;
   double r1Min_;
   double r2Max_;
@@ -113,7 +113,7 @@ public class PSO extends Algorithm {
     WMin_ = 0.1;
     ChVel1_ = 1.0;
     ChVel2_ = 1.0;
-    
+
     comparator_ = new ObjectiveComparator(0) ; // Single objective comparator
     HashMap  parameters ; // Operator parameters
 
@@ -133,11 +133,36 @@ public class PSO extends Algorithm {
   /**
    * Initialize all parameter of the algorithm
    */
-  public void initParams() {
+  public void initParams(SolutionSet initPopulation) {
     particlesSize_ = ((Integer) getInputParameter("swarmSize")).intValue();
     maxIterations_ = ((Integer) getInputParameter("maxIterations")).intValue();
 
     polynomialMutation_ = operators_.get("mutation") ; 
+
+    iteration_ = 0 ;
+
+    success_ = false;
+    particles_ = initPopulation;
+    localBest_ = new Solution[particlesSize_];
+
+    // Create the speed_ vector
+    speed_ = new double[particlesSize_][problem_.getNumberOfVariables()];
+
+
+    deltaMax_ = new double[problem_.getNumberOfVariables()];
+    deltaMin_ = new double[problem_.getNumberOfVariables()];
+    for (int i = 0; i < problem_.getNumberOfVariables(); i++) {
+      deltaMax_[i] = (problem_.getUpperLimit(i) -
+        problem_.getLowerLimit(i)) / 2.0;
+      deltaMin_[i] = -deltaMax_[i];
+    } // for
+  } // initParams 
+
+  public void initParams() {
+    particlesSize_ = ((Integer) getInputParameter("swarmSize")).intValue();
+    maxIterations_ = ((Integer) getInputParameter("maxIterations")).intValue();
+
+    polynomialMutation_ = operators_.get("mutation") ;
 
     iteration_ = 0 ;
 
@@ -154,10 +179,10 @@ public class PSO extends Algorithm {
     deltaMin_ = new double[problem_.getNumberOfVariables()];
     for (int i = 0; i < problem_.getNumberOfVariables(); i++) {
       deltaMax_[i] = (problem_.getUpperLimit(i) -
-        problem_.getLowerLimit(i)) / 2.0;
+              problem_.getLowerLimit(i)) / 2.0;
       deltaMin_[i] = -deltaMax_[i];
     } // for
-  } // initParams 
+  } // initParams
 
   // Adaptive inertia 
   private double inertiaWeight(int iter, int miter, double wmax, double wmin) {
@@ -320,8 +345,8 @@ public class PSO extends Algorithm {
    * as a result of the algorithm execution  
    * @throws JMException 
    */
-  public SolutionSet execute() throws JMException, ClassNotFoundException {
-    initParams();
+  public SolutionSet execute(SolutionSet initPopulation) throws JMException, ClassNotFoundException {
+    initParams(initPopulation);
 
     success_ = false;
     globalBest_ =  null ;
@@ -385,6 +410,7 @@ public class PSO extends Algorithm {
         } // if
       	
       }
+      System.out.println(evaluations_ + ": " + globalBest_) ;
       iteration_++;
     }
     
@@ -392,6 +418,82 @@ public class PSO extends Algorithm {
     SolutionSet resultPopulation = new SolutionSet(1) ;
     resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
     
+    return resultPopulation ;
+  } // execute
+
+  public SolutionSet execute() throws JMException, ClassNotFoundException {
+    initParams();
+
+    success_ = false;
+    globalBest_ =  null ;
+    //->Step 1 (and 3) Create the initial population and evaluate
+    for (int i = 0; i < particlesSize_; i++) {
+      Solution particle = new Solution(problem_);
+      problem_.evaluate(particle);
+      evaluations_ ++ ;
+      particles_.add(particle);
+      if ((globalBest_ == null) || (particle.getObjective(0) < globalBest_.getObjective(0)))
+        globalBest_ = new Solution(particle) ;
+    }
+
+    //-> Step2. Initialize the speed_ of each particle to 0
+    for (int i = 0; i < particlesSize_; i++) {
+      for (int j = 0; j < problem_.getNumberOfVariables(); j++) {
+        speed_[i][j] = 0.0;
+      }
+    }
+
+    //-> Step 6. Initialize the memory of each particle
+    for (int i = 0; i < particles_.size(); i++) {
+      Solution particle = new Solution(particles_.get(i));
+      localBest_[i] = particle;
+    }
+
+    //-> Step 7. Iterations ..
+    while (iteration_ < maxIterations_) {
+      int bestIndividual = (Integer)findBestSolution_.execute(particles_) ;
+      try {
+        //Compute the speed_
+        computeSpeed(iteration_, maxIterations_);
+      } catch (IOException ex) {
+        Logger.getLogger(PSO.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      //Compute the new positions for the particles_
+      computeNewPositions();
+
+      //Mutate the particles_
+      //mopsoMutation(iteration_, maxIterations_);
+
+      //Evaluate the new particles_ in new positions
+      for (int i = 0; i < particles_.size(); i++) {
+        Solution particle = particles_.get(i);
+        problem_.evaluate(particle);
+        evaluations_ ++ ;
+      }
+
+      //Actualize the memory of this particle
+      for (int i = 0; i < particles_.size(); i++) {
+        //int flag = comparator_.compare(particles_.get(i), localBest_[i]);
+        //if (flag < 0) { // the new particle is best_ than the older remember
+        if ((particles_.get(i).getObjective(0) < localBest_[i].getObjective(0))) {
+          Solution particle = new Solution(particles_.get(i));
+          localBest_[i] = particle;
+        } // if
+        if ((particles_.get(i).getObjective(0) < globalBest_.getObjective(0))) {
+          Solution particle = new Solution(particles_.get(i));
+          globalBest_ = particle;
+        } // if
+
+      }
+      System.out.println(evaluations_ + ": " + globalBest_) ;
+      iteration_++;
+    }
+
+    // Return a population with the best individual
+    SolutionSet resultPopulation = new SolutionSet(1) ;
+    resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
+
     return resultPopulation ;
   } // execute
 } // PSO
