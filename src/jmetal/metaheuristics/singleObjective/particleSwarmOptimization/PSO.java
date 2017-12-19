@@ -469,6 +469,12 @@ public class PSO extends AlgorithmHybrid {
     SolutionSet resultPopulation = new SolutionSet(1) ;
     resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
 
+    // Hybrid PSO-GA
+//    SolutionSet resultPopulation = new SolutionSet(particlesSize_) ;
+//    for(int j = 0; j < particlesSize_; j++)
+//      resultPopulation.add(particles_.get(j)) ;
+//    System.out.println("Evaluations: " + evaluations_ ) ;
+
     return resultPopulation ;
   } // execute
 } // PSO

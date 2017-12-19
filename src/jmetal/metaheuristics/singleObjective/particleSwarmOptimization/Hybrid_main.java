@@ -41,7 +41,7 @@ public class Hybrid_main {
         AlgorithmHybrid algorithmPSO ;  // The algorithm to use
         Mutation mutationPSO  ;  // "Turbulence" operator
 
-        Algorithm algorithmGA ;         // The algorithm to use
+        AlgorithmHybrid algorithmGA ;         // The algorithm to use
         Operator crossoverGA ;         // Crossover operator
         Operator  mutationGA  ;         // Mutation operator
         Operator  selectionGA ;         // Selection operator
@@ -103,8 +103,14 @@ public class Hybrid_main {
 
         // Execute the Algorithm
         long initTime = System.currentTimeMillis();
+        // Hyrbrid GA-PSO
         SolutionSet populationGA = algorithmGA.execute();
         SolutionSet populationPSO = algorithmPSO.execute(populationGA);
+
+        // Hybrid PSO-GA
+//        SolutionSet populationGA = algorithmPSO.execute();
+//        SolutionSet populationPSO = algorithmGA.execute(populationGA);
+
         long estimatedTime = System.currentTimeMillis() - initTime;
 
         // Result messages

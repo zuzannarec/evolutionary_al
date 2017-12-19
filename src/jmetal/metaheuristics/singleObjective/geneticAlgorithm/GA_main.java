@@ -21,10 +21,7 @@
 
 package jmetal.metaheuristics.singleObjective.geneticAlgorithm;
 
-import jmetal.core.Algorithm;
-import jmetal.core.Operator;
-import jmetal.core.Problem;
-import jmetal.core.SolutionSet;
+import jmetal.core.*;
 import jmetal.operators.crossover.CrossoverFactory;
 import jmetal.operators.mutation.MutationFactory;
 import jmetal.operators.selection.SelectionFactory;
@@ -46,7 +43,7 @@ public class GA_main {
 
   public static void main(String [] args) throws JMException, ClassNotFoundException {
     Problem   problem   ;         // The problem to solve
-    Algorithm algorithm ;         // The algorithm to use
+    AlgorithmHybrid algorithm ;         // The algorithm to use
     Operator  crossover ;         // Crossover operator
     Operator  mutation  ;         // Mutation operator
     Operator  selection ;         // Selection operator
