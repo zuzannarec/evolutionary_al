@@ -1,7 +1,7 @@
 package jmetal.metaheuristics.singleObjective.particleSwarmOptimization;
 
 import jmetal.core.Algorithm;
-import jmetal.core.Algorithm2;
+import jmetal.core.AlgorithmHybrid;
 import jmetal.core.Operator;
 import jmetal.core.Problem;
 import jmetal.core.SolutionSet;
@@ -37,11 +37,10 @@ public class Hybrid_main {
      */
     public static void main(String [] args)
             throws JMException, IOException, ClassNotFoundException {
-        Problem problemPSO   ;  // The problem to solve
-        Algorithm2 algorithmPSO ;  // The algorithm to use
+        Problem problem   ;  // The problem to solve
+        AlgorithmHybrid algorithmPSO ;  // The algorithm to use
         Mutation mutationPSO  ;  // "Turbulence" operator
 
-        Problem   problemGA   ;         // The problem to solve
         Algorithm algorithmGA ;         // The algorithm to use
         Operator crossoverGA ;         // Crossover operator
         Operator  mutationGA  ;         // Mutation operator
@@ -57,16 +56,16 @@ public class Hybrid_main {
         fileHandler_ = new FileHandler("PSO_main.log");
         logger_.addHandler(fileHandler_) ;
 
-        problemPSO = new Rastrigin("Real", 20);
+        problem = new Rastrigin("Real", 100);
 
-        algorithmPSO = new PSO(problemPSO) ;
+        algorithmPSO = new PSO(problem) ;
 
-        algorithmGA = new gGA(problemPSO) ; // Generational GA
+        algorithmGA = new gGA(problem) ; // Generational GA
 
 
         // Algorithm parameters GA
-        algorithmGA.setInputParameter("populationSize",500);
-        algorithmGA.setInputParameter("maxEvaluations", 500);
+        algorithmGA.setInputParameter("populationSize",10);
+        algorithmGA.setInputParameter("maxEvaluations", 50);
 
         // Mutation and Crossover for Real codification
         parametersGA = new HashMap() ;
@@ -75,7 +74,7 @@ public class Hybrid_main {
         crossoverGA = CrossoverFactory.getCrossoverOperator("SBXCrossover", parametersGA);
 
         parametersGA = new HashMap() ;
-        parametersGA.put("probability", 1.0/problemPSO.getNumberOfVariables()) ;
+        parametersGA.put("probability", 1.0/problem.getNumberOfVariables()) ;
         parametersGA.put("distributionIndex", 20.0) ;
         mutationGA = MutationFactory.getMutationOperator("PolynomialMutation", parametersGA);
 
@@ -90,11 +89,11 @@ public class Hybrid_main {
 
 
         // Algorithm parameters PSO
-        algorithmPSO.setInputParameter("swarmSize",500);
-        algorithmPSO.setInputParameter("maxIterations",500);
+        algorithmPSO.setInputParameter("swarmSize",10);
+        algorithmPSO.setInputParameter("maxIterations",50);
 
         parametersPSO = new HashMap() ;
-        parametersPSO.put("probability", 1.0/problemPSO.getNumberOfVariables()) ;
+        parametersPSO.put("probability", 1.0/problem.getNumberOfVariables()) ;
         parametersPSO.put("distributionIndex", 20.0) ;
         mutationPSO = MutationFactory.getMutationOperator("PolynomialMutation", parametersPSO);
 

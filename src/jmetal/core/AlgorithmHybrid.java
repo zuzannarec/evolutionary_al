@@ -34,7 +34,7 @@ import java.util.Map;
  *  The class declares an abstract method called <code>execute</code>, which 
  *  defines the behavior of the algorithm.
  */ 
-public abstract class Algorithm2 implements Serializable {
+public abstract class AlgorithmHybrid implements Serializable {
 
   /**
    * Stores the problem to solve
@@ -64,7 +64,7 @@ public abstract class Algorithm2 implements Serializable {
    * Constructor
    * @param problem The problem to be solved
    */
-  public Algorithm2(Problem problem) {
+  public AlgorithmHybrid(Problem problem) {
   	problem_ = problem ;
   }
   

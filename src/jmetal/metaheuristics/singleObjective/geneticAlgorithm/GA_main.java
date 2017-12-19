@@ -70,8 +70,8 @@ public class GA_main {
     //algorithm = new acGA(problem) ;   // Asynchronous cGA
     
     /* Algorithm parameters*/
-    algorithm.setInputParameter("populationSize",500);
-    algorithm.setInputParameter("maxEvaluations", 5000);
+    algorithm.setInputParameter("populationSize",10);
+    algorithm.setInputParameter("maxEvaluations", 50);
 
     // Mutation and Crossover for Real codification 
     parameters = new HashMap() ;

@@ -37,7 +37,7 @@ import java.util.logging.Logger;
 /**
  * Class implementing a single-objective PSO algorithm
  */
-public class PSO extends Algorithm2 {
+public class PSO extends AlgorithmHybrid {
 
 	/**
    * Stores the number of particles_ used
@@ -133,31 +133,6 @@ public class PSO extends Algorithm2 {
   /**
    * Initialize all parameter of the algorithm
    */
-  public void initParams(SolutionSet initPopulation) {
-    particlesSize_ = ((Integer) getInputParameter("swarmSize")).intValue();
-    maxIterations_ = ((Integer) getInputParameter("maxIterations")).intValue();
-
-    polynomialMutation_ = operators_.get("mutation") ; 
-
-    iteration_ = 0 ;
-
-    success_ = false;
-    particles_ = initPopulation;
-    localBest_ = new Solution[particlesSize_];
-
-    // Create the speed_ vector
-    speed_ = new double[particlesSize_][problem_.getNumberOfVariables()];
-
-
-    deltaMax_ = new double[problem_.getNumberOfVariables()];
-    deltaMin_ = new double[problem_.getNumberOfVariables()];
-    for (int i = 0; i < problem_.getNumberOfVariables(); i++) {
-      deltaMax_[i] = (problem_.getUpperLimit(i) -
-        problem_.getLowerLimit(i)) / 2.0;
-      deltaMin_[i] = -deltaMax_[i];
-    } // for
-  } // initParams 
-
   public void initParams() {
     particlesSize_ = ((Integer) getInputParameter("swarmSize")).intValue();
     maxIterations_ = ((Integer) getInputParameter("maxIterations")).intValue();
@@ -346,18 +321,18 @@ public class PSO extends Algorithm2 {
    * @throws JMException 
    */
   public SolutionSet execute(SolutionSet initPopulation) throws JMException, ClassNotFoundException {
-    initParams(initPopulation);
-
+    //initParams(initPopulation);
+    initParams();
+    // do poprawy
     success_ = false;
     globalBest_ =  null ;
     //->Step 1 (and 3) Create the initial population and evaluate
     for (int i = 0; i < particlesSize_; i++) {
-      Solution particle = new Solution(problem_);
-      problem_.evaluate(particle);
+      problem_.evaluate(initPopulation.get(i));
       evaluations_ ++ ;
-      particles_.add(particle);
-      if ((globalBest_ == null) || (particle.getObjective(0) < globalBest_.getObjective(0)))
-        globalBest_ = new Solution(particle) ;
+      particles_.add(initPopulation.get(i));
+      if ((globalBest_ == null) || (initPopulation.get(i).getObjective(0) < globalBest_.getObjective(0)))
+        globalBest_ = new Solution(initPopulation.get(i)) ;
     }
 
     //-> Step2. Initialize the speed_ of each particle to 0

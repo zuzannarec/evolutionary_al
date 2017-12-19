@@ -131,12 +131,16 @@ public class gGA extends Algorithm {
       offspringPopulation.clear();
       population.sort(comparator) ;
     } // while
-    
+
     // Return a population with the best individual
+//    SolutionSet resultPopulation = new SolutionSet(1) ;
+//    resultPopulation.add(population.get(0)) ;
+
+    // Hybrid GA-PSO
     SolutionSet resultPopulation = new SolutionSet(populationSize) ;
     for(int j = 0; j < populationSize; j++)
       resultPopulation.add(population.get(j)) ;
-    
+
     System.out.println("Evaluations: " + evaluations ) ;
     return resultPopulation ;
   } // execute

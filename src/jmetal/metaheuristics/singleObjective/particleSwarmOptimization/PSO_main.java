@@ -21,13 +21,12 @@
 
 package jmetal.metaheuristics.singleObjective.particleSwarmOptimization;
 
-import jmetal.core.Algorithm2;
+import jmetal.core.AlgorithmHybrid;
 import jmetal.core.Problem;
 import jmetal.core.SolutionSet;
 import jmetal.operators.mutation.Mutation;
 import jmetal.operators.mutation.MutationFactory;
 import jmetal.problems.singleObjective.Rastrigin;
-import jmetal.problems.singleObjective.Sphere;
 import jmetal.qualityIndicator.QualityIndicator;
 import jmetal.util.Configuration;
 import jmetal.util.JMException;
@@ -58,7 +57,7 @@ public class PSO_main {
   public static void main(String [] args) 
   		throws JMException, IOException, ClassNotFoundException {
     Problem   problem   ;  // The problem to solve
-    Algorithm2 algorithm ;  // The algorithm to use
+    AlgorithmHybrid algorithm ;  // The algorithm to use
     Mutation  mutation  ;  // "Turbulence" operator
     
     QualityIndicator indicators ; // Object to get quality indicators
@@ -73,13 +72,13 @@ public class PSO_main {
     //problem = new Sphere("Real", 20) ;
     //problem = new Easom("Real") ;
     // problem = new Griewank("Real", 10) ;
-    problem = new Rastrigin("Real", 20);
+    problem = new Rastrigin("Real", 100);
 
     algorithm = new PSO(problem) ;
     
     // Algorithm parameters
-    algorithm.setInputParameter("swarmSize",50);
-    algorithm.setInputParameter("maxIterations",500);
+    algorithm.setInputParameter("swarmSize",10);
+    algorithm.setInputParameter("maxIterations",50);
     
     parameters = new HashMap() ;
     parameters.put("probability", 1.0/problem.getNumberOfVariables()) ;
