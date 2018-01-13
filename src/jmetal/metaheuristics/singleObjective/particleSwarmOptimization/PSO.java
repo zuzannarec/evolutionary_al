@@ -129,7 +129,6 @@ public class PSO extends AlgorithmHybrid {
   private double deltaMin_[];
   boolean success_;
 
-
   /**
    * Initialize all parameter of the algorithm
    */
@@ -314,6 +313,9 @@ public class PSO extends AlgorithmHybrid {
     }
   } // mopsoMutation
 
+  public int get_ev_value(){
+    return evaluations_;
+  }
   /**   
    * Runs of the SMPSO algorithm.
    * @return a <code>SolutionSet</code> that is a set of non dominated solutions
@@ -402,10 +404,10 @@ public class PSO extends AlgorithmHybrid {
     return resultPopulation ;
   } // execute
 
-  public SolutionSet execute(SolutionSet population) throws JMException, ClassNotFoundException {
+  public SolutionSet execute(SolutionSet population, int evaluations_init) throws JMException, ClassNotFoundException {
     //initParams(initPopulation);
     initParams();
-    // do poprawy
+    evaluations_ = evaluations_init;
     success_ = false;
     globalBest_ =  null ;
     //->Step 1 (and 3) Create the initial population and evaluate

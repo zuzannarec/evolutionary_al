@@ -31,7 +31,7 @@ import java.util.Comparator;
  * Class implementing a generational genetic algorithm
  */
 public class gGA extends AlgorithmHybrid {
-  
+  int ev;
  /**
   *
   * Constructor
@@ -40,8 +40,16 @@ public class gGA extends AlgorithmHybrid {
   */
   public gGA(Problem problem){
     super(problem) ;
+    ev = 0;
   } // GGA
-  
+
+  public int get_ev_value(){
+    if ((ev % 10) == 0)
+        return ev;
+    else
+        return (ev - ev % 10);
+  }
+
  /**
   * Execute the GGA algorithm
  * @throws JMException 
@@ -68,8 +76,8 @@ public class gGA extends AlgorithmHybrid {
     // Initialize the variables
     population          = new SolutionSet(populationSize) ;   
     offspringPopulation = new SolutionSet(populationSize) ;
-    
-    evaluations  = 0;                
+
+    evaluations  = 0;
 
     // Read the operators
     mutationOperator  = this.operators_.get("mutation");
@@ -82,14 +90,15 @@ public class gGA extends AlgorithmHybrid {
       newIndividual = new Solution(problem_);                    
       problem_.evaluate(newIndividual);            
       evaluations++;
+      ev++;
       population.add(newIndividual);
     } //for       
      
     // Sort population
     population.sort(comparator) ;
     while (evaluations < maxEvaluations) {
-      if ((evaluations % 10) == 0) {
-        System.out.println(evaluations + ": " + population.get(0).getObjective(0)) ;
+      if ((ev % 10) == 0) {
+        System.out.println(ev + ": " + population.get(0).getObjective(0)) ;
       } //
 
       // Copy the best two individuals to the offspring population
@@ -116,6 +125,7 @@ public class gGA extends AlgorithmHybrid {
         problem_.evaluate(offspring[1]);            
           
         evaluations +=2;
+        ev +=2;
     
         // Replacement: the two new individuals are inserted in the offspring
         //                population
@@ -141,14 +151,15 @@ public class gGA extends AlgorithmHybrid {
     for(int j = 0; j < populationSize; j++)
       resultPopulation.add(population.get(j)) ;
 
-    System.out.println("Evaluations: " + evaluations ) ;
+    //System.out.println("Evaluations: " + evaluations ) ;
     return resultPopulation ;
   } // execute
 
-  public SolutionSet execute(SolutionSet population) throws JMException, ClassNotFoundException {
+  public SolutionSet execute(SolutionSet population, int ev_init) throws JMException, ClassNotFoundException {
     int populationSize ;
     int maxEvaluations ;
     int evaluations    ;
+    ev = ev_init;
 
     SolutionSet offspringPopulation ;
 
@@ -173,11 +184,17 @@ public class gGA extends AlgorithmHybrid {
     crossoverOperator = this.operators_.get("crossover");
     selectionOperator = this.operators_.get("selection");
 
+    // Create the initial population
+    for (int i = 0; i < populationSize; i++) {
+      evaluations++;
+      ev++;
+    } //for
+
     // Sort population
     population.sort(comparator) ;
     while (evaluations < maxEvaluations) {
-      if ((evaluations % 10) == 0) {
-        System.out.println(evaluations + ": " + population.get(0).getObjective(0)) ;
+      if ((ev % 10) == 0) {
+        System.out.println(ev + ": " + population.get(0).getObjective(0)) ;
       } //
 
       // Copy the best two individuals to the offspring population
@@ -204,6 +221,7 @@ public class gGA extends AlgorithmHybrid {
         problem_.evaluate(offspring[1]);
 
         evaluations +=2;
+        ev +=2;
 
         // Replacement: the two new individuals are inserted in the offspring
         //                population
@@ -229,7 +247,7 @@ public class gGA extends AlgorithmHybrid {
     for(int j = 0; j < populationSize; j++)
       resultPopulation.add(population.get(j)) ;
 
-    System.out.println("Evaluations: " + evaluations ) ;
+    //System.out.println("Evaluations: " + evaluations ) ;
     return resultPopulation ;
   } // execute
 } // gGA

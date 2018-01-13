@@ -73,9 +73,11 @@ public abstract class AlgorithmHybrid implements Serializable {
   * @return a <code>SolutionSet</code> that is a set of non dominated solutions
   * as a result of the algorithm execution  
   */
+  public abstract int get_ev_value();
+
   public abstract SolutionSet execute() throws JMException, ClassNotFoundException ;
 
-  public abstract SolutionSet execute(SolutionSet initPopulation) throws JMException, ClassNotFoundException ;
+  public abstract SolutionSet execute(SolutionSet initPopulation, int evaluations_init) throws JMException, ClassNotFoundException ;
     /**
   * Offers facilities for add new operators for the algorithm. To use an
   * operator, an algorithm has to obtain it through the 

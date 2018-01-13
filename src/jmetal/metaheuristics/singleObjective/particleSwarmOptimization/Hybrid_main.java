@@ -1,6 +1,5 @@
 package jmetal.metaheuristics.singleObjective.particleSwarmOptimization;
 
-import jmetal.core.Algorithm;
 import jmetal.core.AlgorithmHybrid;
 import jmetal.core.Operator;
 import jmetal.core.Problem;
@@ -65,7 +64,7 @@ public class Hybrid_main {
 
         // Algorithm parameters GA
         algorithmGA.setInputParameter("populationSize",10);
-        algorithmGA.setInputParameter("maxEvaluations", 5000);
+        algorithmGA.setInputParameter("maxEvaluations", 10);
 
         // Mutation and Crossover for Real codification
         parametersGA = new HashMap() ;
@@ -90,7 +89,7 @@ public class Hybrid_main {
 
         // Algorithm parameters PSO
         algorithmPSO.setInputParameter("swarmSize",10);
-        algorithmPSO.setInputParameter("maxIterations",5000);
+        algorithmPSO.setInputParameter("maxIterations",50);
 
         parametersPSO = new HashMap() ;
         parametersPSO.put("probability", 1.0/problem.getNumberOfVariables()) ;
@@ -104,20 +103,20 @@ public class Hybrid_main {
         // Execute the Algorithm
         long initTime = System.currentTimeMillis();
         // Hyrbrid GA-PSO
-//        SolutionSet populationGA1 = algorithmPSO.execute();
-//        SolutionSet populationPSO1 = algorithmGA.execute(populationGA1);
-//        SolutionSet populationGA2 = algorithmPSO.execute(populationPSO1);
-//        SolutionSet populationPSO2 = algorithmGA.execute(populationGA2);
-//        SolutionSet populationGA3 = algorithmPSO.execute(populationPSO2);
-//        SolutionSet populationPSO3 = algorithmGA.execute(populationGA3);
+//        SolutionSet populationPSO1 = algorithmPSO.execute();
+//        SolutionSet populationGA1 = algorithmGA.execute(populationPSO1, algorithmPSO.get_ev_value());
+//        SolutionSet populationPSO2 = algorithmPSO.execute(populationGA1, algorithmGA.get_ev_value());
+//        SolutionSet populationGA2 = algorithmGA.execute(populationPSO2, algorithmPSO.get_ev_value());
+//        SolutionSet populationPSO3 = algorithmPSO.execute(populationGA2, algorithmGA.get_ev_value());
+//        SolutionSet populationGA3 = algorithmGA.execute(populationPSO3, algorithmPSO.get_ev_value());
 
         // Hybrid PSO-GA
-        SolutionSet populationGA1 = algorithmPSO.execute();
-        SolutionSet populationPSO1 = algorithmGA.execute(populationGA1);
-        SolutionSet populationGA2 = algorithmPSO.execute(populationPSO1);
-        SolutionSet populationPSO2 = algorithmGA.execute(populationGA2);
-        SolutionSet populationGA3 = algorithmPSO.execute(populationPSO2);
-        SolutionSet populationPSO3 = algorithmGA.execute(populationGA3);
+        SolutionSet populationGA1 = algorithmGA.execute();
+        SolutionSet populationPSO1 = algorithmPSO.execute(populationGA1, algorithmGA.get_ev_value());
+        SolutionSet populationGA2 = algorithmGA.execute(populationPSO1, algorithmPSO.get_ev_value());
+        SolutionSet populationPSO2 = algorithmPSO.execute(populationGA2, algorithmGA.get_ev_value());
+        SolutionSet populationGA3 = algorithmGA.execute(populationPSO2, algorithmPSO.get_ev_value());
+        SolutionSet populationPSO3 = algorithmPSO.execute(populationGA3, algorithmGA.get_ev_value());
 
         long estimatedTime = System.currentTimeMillis() - initTime;
 

@@ -78,7 +78,7 @@ public class PSO_main {
     
     // Algorithm parameters
     algorithm.setInputParameter("swarmSize",10);
-    algorithm.setInputParameter("maxIterations",50);
+    algorithm.setInputParameter("maxIterations",1000);
     
     parameters = new HashMap() ;
     parameters.put("probability", 1.0/problem.getNumberOfVariables()) ;
