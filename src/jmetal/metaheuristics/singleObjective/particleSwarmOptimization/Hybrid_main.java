@@ -104,16 +104,20 @@ public class Hybrid_main {
         // Execute the Algorithm
         long initTime = System.currentTimeMillis();
         // Hyrbrid GA-PSO
+//        SolutionSet populationGA1 = algorithmPSO.execute();
+//        SolutionSet populationPSO1 = algorithmGA.execute(populationGA1);
+//        SolutionSet populationGA2 = algorithmPSO.execute(populationPSO1);
+//        SolutionSet populationPSO2 = algorithmGA.execute(populationGA2);
+//        SolutionSet populationGA3 = algorithmPSO.execute(populationPSO2);
+//        SolutionSet populationPSO3 = algorithmGA.execute(populationGA3);
+
+        // Hybrid PSO-GA
         SolutionSet populationGA1 = algorithmPSO.execute();
         SolutionSet populationPSO1 = algorithmGA.execute(populationGA1);
         SolutionSet populationGA2 = algorithmPSO.execute(populationPSO1);
         SolutionSet populationPSO2 = algorithmGA.execute(populationGA2);
         SolutionSet populationGA3 = algorithmPSO.execute(populationPSO2);
         SolutionSet populationPSO3 = algorithmGA.execute(populationGA3);
-
-        // Hybrid PSO-GA
-//        SolutionSet populationGA = algorithmPSO.execute();
-//        SolutionSet populationPSO = algorithmGA.execute(populationGA);
 
         long estimatedTime = System.currentTimeMillis() - initTime;
 
