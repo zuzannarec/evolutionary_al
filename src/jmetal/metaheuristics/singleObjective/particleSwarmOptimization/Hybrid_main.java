@@ -56,7 +56,7 @@ public class Hybrid_main {
         fileHandler_ = new FileHandler("PSO_main.log");
         logger_.addHandler(fileHandler_) ;
 
-        problem = new Rastrigin("Real", 100);
+        problem = new Rastrigin("Real", 20);
 
         algorithmPSO = new PSO(problem) ;
 
@@ -65,11 +65,11 @@ public class Hybrid_main {
 
         // Algorithm parameters GA
         algorithmGA.setInputParameter("populationSize",10);
-        algorithmGA.setInputParameter("maxEvaluations", 50);
+        algorithmGA.setInputParameter("maxEvaluations", 5000);
 
         // Mutation and Crossover for Real codification
         parametersGA = new HashMap() ;
-        parametersGA.put("probability", 0.9) ;
+        parametersGA.put("probability", 0.8) ;
         parametersGA.put("distributionIndex", 20.0) ;
         crossoverGA = CrossoverFactory.getCrossoverOperator("SBXCrossover", parametersGA);
 
@@ -90,7 +90,7 @@ public class Hybrid_main {
 
         // Algorithm parameters PSO
         algorithmPSO.setInputParameter("swarmSize",10);
-        algorithmPSO.setInputParameter("maxIterations",50);
+        algorithmPSO.setInputParameter("maxIterations",5000);
 
         parametersPSO = new HashMap() ;
         parametersPSO.put("probability", 1.0/problem.getNumberOfVariables()) ;
@@ -104,8 +104,12 @@ public class Hybrid_main {
         // Execute the Algorithm
         long initTime = System.currentTimeMillis();
         // Hyrbrid GA-PSO
-        SolutionSet populationGA = algorithmGA.execute();
-        SolutionSet populationPSO = algorithmPSO.execute(populationGA);
+        SolutionSet populationGA1 = algorithmPSO.execute();
+        SolutionSet populationPSO1 = algorithmGA.execute(populationGA1);
+        SolutionSet populationGA2 = algorithmPSO.execute(populationPSO1);
+        SolutionSet populationPSO2 = algorithmGA.execute(populationGA2);
+        SolutionSet populationGA3 = algorithmPSO.execute(populationPSO2);
+        SolutionSet populationPSO3 = algorithmGA.execute(populationGA3);
 
         // Hybrid PSO-GA
 //        SolutionSet populationGA = algorithmPSO.execute();

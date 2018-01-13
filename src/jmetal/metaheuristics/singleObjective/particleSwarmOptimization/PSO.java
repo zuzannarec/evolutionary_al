@@ -320,82 +320,6 @@ public class PSO extends AlgorithmHybrid {
    * as a result of the algorithm execution  
    * @throws JMException 
    */
-  public SolutionSet execute(SolutionSet initPopulation) throws JMException, ClassNotFoundException {
-    //initParams(initPopulation);
-    initParams();
-    // do poprawy
-    success_ = false;
-    globalBest_ =  null ;
-    //->Step 1 (and 3) Create the initial population and evaluate
-    for (int i = 0; i < particlesSize_; i++) {
-      problem_.evaluate(initPopulation.get(i));
-      evaluations_ ++ ;
-      particles_.add(initPopulation.get(i));
-      if ((globalBest_ == null) || (initPopulation.get(i).getObjective(0) < globalBest_.getObjective(0)))
-        globalBest_ = new Solution(initPopulation.get(i)) ;
-    }
-
-    //-> Step2. Initialize the speed_ of each particle to 0
-    for (int i = 0; i < particlesSize_; i++) {
-      for (int j = 0; j < problem_.getNumberOfVariables(); j++) {
-        speed_[i][j] = 0.0;
-      }
-    }
-
-    //-> Step 6. Initialize the memory of each particle
-    for (int i = 0; i < particles_.size(); i++) {
-      Solution particle = new Solution(particles_.get(i));
-      localBest_[i] = particle;
-    }
-
-    //-> Step 7. Iterations ..        
-    while (iteration_ < maxIterations_) {
-      int bestIndividual = (Integer)findBestSolution_.execute(particles_) ;
-      try {
-        //Compute the speed_
-        computeSpeed(iteration_, maxIterations_);
-      } catch (IOException ex) {
-        Logger.getLogger(PSO.class.getName()).log(Level.SEVERE, null, ex);
-      }
-
-      //Compute the new positions for the particles_            
-      computeNewPositions();
-
-      //Mutate the particles_          
-      //mopsoMutation(iteration_, maxIterations_);
-
-      //Evaluate the new particles_ in new positions
-      for (int i = 0; i < particles_.size(); i++) {
-        Solution particle = particles_.get(i);
-        problem_.evaluate(particle);
-        evaluations_ ++ ;
-      }
-
-      //Actualize the memory of this particle
-      for (int i = 0; i < particles_.size(); i++) {
-        //int flag = comparator_.compare(particles_.get(i), localBest_[i]);
-        //if (flag < 0) { // the new particle is best_ than the older remember        
-      	if ((particles_.get(i).getObjective(0) < localBest_[i].getObjective(0))) {
-          Solution particle = new Solution(particles_.get(i));
-          localBest_[i] = particle;
-        } // if
-      	if ((particles_.get(i).getObjective(0) < globalBest_.getObjective(0))) {
-          Solution particle = new Solution(particles_.get(i));
-          globalBest_ = particle;
-        } // if
-      	
-      }
-      System.out.println(evaluations_ + ": " + globalBest_) ;
-      iteration_++;
-    }
-    
-    // Return a population with the best individual
-    SolutionSet resultPopulation = new SolutionSet(1) ;
-    resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
-    
-    return resultPopulation ;
-  } // execute
-
   public SolutionSet execute() throws JMException, ClassNotFoundException {
     initParams();
 
@@ -466,15 +390,99 @@ public class PSO extends AlgorithmHybrid {
     }
 
     // Return a population with the best individual
-    SolutionSet resultPopulation = new SolutionSet(1) ;
-    resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
+//    SolutionSet resultPopulation = new SolutionSet(1) ;
+//    resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
 
     // Hybrid PSO-GA
-//    SolutionSet resultPopulation = new SolutionSet(particlesSize_) ;
-//    for(int j = 0; j < particlesSize_; j++)
-//      resultPopulation.add(particles_.get(j)) ;
-//    System.out.println("Evaluations: " + evaluations_ ) ;
+    SolutionSet resultPopulation = new SolutionSet(particlesSize_) ;
+    for(int j = 0; j < particlesSize_; j++)
+      resultPopulation.add(particles_.get(j)) ;
+    //System.out.println("Evaluations: " + evaluations_ ) ;
 
     return resultPopulation ;
   } // execute
+
+  public SolutionSet execute(SolutionSet population) throws JMException, ClassNotFoundException {
+    //initParams(initPopulation);
+    initParams();
+    // do poprawy
+    success_ = false;
+    globalBest_ =  null ;
+    //->Step 1 (and 3) Create the initial population and evaluate
+    for (int i = 0; i < particlesSize_; i++) {
+      problem_.evaluate(population.get(i));
+      evaluations_ ++ ;
+      particles_.add(population.get(i));
+      if ((globalBest_ == null) || (population.get(i).getObjective(0) < globalBest_.getObjective(0)))
+        globalBest_ = new Solution(population.get(i)) ;
+    }
+
+    //-> Step2. Initialize the speed_ of each particle to 0
+    for (int i = 0; i < particlesSize_; i++) {
+      for (int j = 0; j < problem_.getNumberOfVariables(); j++) {
+        speed_[i][j] = 0.0;
+      }
+    }
+
+    //-> Step 6. Initialize the memory of each particle
+    for (int i = 0; i < particles_.size(); i++) {
+      Solution particle = new Solution(particles_.get(i));
+      localBest_[i] = particle;
+    }
+
+    //-> Step 7. Iterations ..        
+    while (iteration_ < maxIterations_) {
+      int bestIndividual = (Integer)findBestSolution_.execute(particles_) ;
+      try {
+        //Compute the speed_
+        computeSpeed(iteration_, maxIterations_);
+      } catch (IOException ex) {
+        Logger.getLogger(PSO.class.getName()).log(Level.SEVERE, null, ex);
+      }
+
+      //Compute the new positions for the particles_            
+      computeNewPositions();
+
+      //Mutate the particles_          
+      //mopsoMutation(iteration_, maxIterations_);
+
+      //Evaluate the new particles_ in new positions
+      for (int i = 0; i < particles_.size(); i++) {
+        Solution particle = particles_.get(i);
+        problem_.evaluate(particle);
+        evaluations_ ++ ;
+      }
+
+      //Actualize the memory of this particle
+      for (int i = 0; i < particles_.size(); i++) {
+        //int flag = comparator_.compare(particles_.get(i), localBest_[i]);
+        //if (flag < 0) { // the new particle is best_ than the older remember        
+      	if ((particles_.get(i).getObjective(0) < localBest_[i].getObjective(0))) {
+          Solution particle = new Solution(particles_.get(i));
+          localBest_[i] = particle;
+        } // if
+      	if ((particles_.get(i).getObjective(0) < globalBest_.getObjective(0))) {
+          Solution particle = new Solution(particles_.get(i));
+          globalBest_ = particle;
+        } // if
+      	
+      }
+      System.out.println(evaluations_ + ": " + globalBest_) ;
+      iteration_++;
+    }
+    
+    // Return a population with the best individual
+//    SolutionSet resultPopulation = new SolutionSet(1) ;
+//    resultPopulation.add(particles_.get((Integer)findBestSolution_.execute(particles_))) ;
+
+    // Hybrid PSO-GA
+    SolutionSet resultPopulation = new SolutionSet(particlesSize_) ;
+    for(int j = 0; j < particlesSize_; j++)
+      resultPopulation.add(particles_.get(j)) ;
+    //System.out.println("Evaluations: " + evaluations_ ) ;
+
+    return resultPopulation ;
+  } // execute
+
+
 } // PSO

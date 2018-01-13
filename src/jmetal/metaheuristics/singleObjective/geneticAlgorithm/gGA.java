@@ -164,7 +164,6 @@ public class gGA extends AlgorithmHybrid {
     maxEvaluations = ((Integer)this.getInputParameter("maxEvaluations")).intValue();
 
     // Initialize the variables
-    population          = new SolutionSet(populationSize) ;
     offspringPopulation = new SolutionSet(populationSize) ;
 
     evaluations  = 0;
@@ -173,15 +172,6 @@ public class gGA extends AlgorithmHybrid {
     mutationOperator  = this.operators_.get("mutation");
     crossoverOperator = this.operators_.get("crossover");
     selectionOperator = this.operators_.get("selection");
-
-    // Create the initial population
-    Solution newIndividual;
-    for (int i = 0; i < populationSize; i++) {
-      newIndividual = new Solution(problem_);
-      problem_.evaluate(newIndividual);
-      evaluations++;
-      population.add(newIndividual);
-    } //for
 
     // Sort population
     population.sort(comparator) ;
@@ -230,14 +220,14 @@ public class gGA extends AlgorithmHybrid {
       population.sort(comparator) ;
     } // while
 
-    // Return a population with the best individual
-    SolutionSet resultPopulation = new SolutionSet(1) ;
-    resultPopulation.add(population.get(0)) ;
+//    // Return a population with the best individual
+//    SolutionSet resultPopulation = new SolutionSet(1) ;
+//    resultPopulation.add(population.get(0)) ;
 
     // Hybrid GA-PSO
-//    SolutionSet resultPopulation = new SolutionSet(populationSize) ;
-//    for(int j = 0; j < populationSize; j++)
-//      resultPopulation.add(population.get(j)) ;
+    SolutionSet resultPopulation = new SolutionSet(populationSize) ;
+    for(int j = 0; j < populationSize; j++)
+      resultPopulation.add(population.get(j)) ;
 
     System.out.println("Evaluations: " + evaluations ) ;
     return resultPopulation ;
