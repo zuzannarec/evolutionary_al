@@ -89,7 +89,7 @@ public class Hybrid_main {
 
         // Algorithm parameters PSO
         algorithmPSO.setInputParameter("swarmSize",10);
-        algorithmPSO.setInputParameter("maxIterations",50);
+        algorithmPSO.setInputParameter("maxIterations",500);
 
         parametersPSO = new HashMap() ;
         parametersPSO.put("probability", 1.0/problem.getNumberOfVariables()) ;

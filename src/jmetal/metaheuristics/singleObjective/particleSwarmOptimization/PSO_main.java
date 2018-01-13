@@ -72,14 +72,14 @@ public class PSO_main {
     //problem = new Sphere("Real", 20) ;
     //problem = new Easom("Real") ;
     // problem = new Griewank("Real", 10) ;
-    problem = new Rastrigin("Real", 100);
+    problem = new Rastrigin("Real", 20);
 
     algorithm = new PSO(problem) ;
     
     // Algorithm parameters
     algorithm.setInputParameter("swarmSize",10);
-    algorithm.setInputParameter("maxIterations",1000);
-    
+    algorithm.setInputParameter("maxIterations",1500);
+
     parameters = new HashMap() ;
     parameters.put("probability", 1.0/problem.getNumberOfVariables()) ;
     parameters.put("distributionIndex", 20.0) ;
