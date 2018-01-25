@@ -63,8 +63,8 @@ public class Hybrid_main {
 
 
         // Algorithm parameters GA
-        algorithmGA.setInputParameter("populationSize",10);
-        algorithmGA.setInputParameter("maxEvaluations", 10);
+        algorithmGA.setInputParameter("populationSize",20);
+        algorithmGA.setInputParameter("maxEvaluations", 1000);
 
         // Mutation and Crossover for Real codification
         parametersGA = new HashMap() ;
@@ -88,8 +88,8 @@ public class Hybrid_main {
 
 
         // Algorithm parameters PSO
-        algorithmPSO.setInputParameter("swarmSize",10);
-        algorithmPSO.setInputParameter("maxIterations",500);
+        algorithmPSO.setInputParameter("swarmSize",20);
+        algorithmPSO.setInputParameter("maxIterations",50);
 
         parametersPSO = new HashMap() ;
         parametersPSO.put("probability", 1.0/problem.getNumberOfVariables()) ;
@@ -102,7 +102,7 @@ public class Hybrid_main {
 
         // Execute the Algorithm
         long initTime = System.currentTimeMillis();
-        // Hyrbrid GA-PSO
+        // Hyrbrid PSO-GA
 //        SolutionSet populationPSO1 = algorithmPSO.execute();
 //        SolutionSet populationGA1 = algorithmGA.execute(populationPSO1, algorithmPSO.get_ev_value());
 //        SolutionSet populationPSO2 = algorithmPSO.execute(populationGA1, algorithmGA.get_ev_value());
@@ -120,11 +120,5 @@ public class Hybrid_main {
 
         long estimatedTime = System.currentTimeMillis() - initTime;
 
-        // Result messages
-        //logger_.info("Total execution time: "+estimatedTime + "ms");
-        //logger_.info("Objectives values have been writen to file FUN");
-        //populationPSO.printObjectivesToFile("FUN");
-        //logger_.info("Variables values have been writen to file VAR");
-        //populationPSO.printVariablesToFile("VAR");
     } //main
-} // PSO_main
+} // PSO_hybrid_main

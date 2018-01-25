@@ -59,7 +59,7 @@ public class GA_main {
 //      problem = new Sphere("Real", 100) ;
 //    problem = new Easom("Real") ;
 //    problem = new Griewank("Real", 10) ;
-    problem = new Rastrigin("Real", 100) ;
+    problem = new Rastrigin("Real", 10) ;
     
     algorithm = new gGA(problem) ; // Generational GA
     //algorithm = new ssGA(problem); // Steady-state GA
@@ -67,8 +67,8 @@ public class GA_main {
     //algorithm = new acGA(problem) ;   // Asynchronous cGA
     
     /* Algorithm parameters*/
-    algorithm.setInputParameter("populationSize",10);
-    algorithm.setInputParameter("maxEvaluations", 50);
+    algorithm.setInputParameter("populationSize",50);
+    algorithm.setInputParameter("maxEvaluations", 1000);
 
     // Mutation and Crossover for Real codification 
     parameters = new HashMap() ;
